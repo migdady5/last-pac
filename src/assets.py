@@ -96,20 +96,21 @@ class GameAssets:
     # ==============================================================
 
     def _load_character(
-            self,
-            filename: str,
-        ) ->     pygame.Surface:
-            """Load a character small enough to fit inside a corridor."""
+        self,
+        filename: str,
+    ) -> pygame.Surface:
+        """Load a character small enough to fit inside a corridor."""
 
-            path = self.base_path / "characters" / filename
-            image = pygame.image.load(str(path)).convert_alpha()
+        path = self.base_path / "characters" / filename
+        image = pygame.image.load(str(path)).convert_alpha()
 
-            sprite_size = max(1, CELL_SIZE - 4)
+        sprite_size = max(1, CELL_SIZE - 4)
 
-            return pygame.transform.smoothscale(
-                image,
-                (sprite_size, sprite_size),
-            )
+        return pygame.transform.smoothscale(
+            image,
+            (sprite_size, sprite_size),
+        )
+
     def _load_wall(
         self,
         filename: str,

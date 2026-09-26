@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import importlib
 from collections import deque
+from typing import Any, cast
 from dataclasses import dataclass
 
 DIRECTIONS = {(0, -1): (1, 4), (1, 0): (2, 8),
@@ -44,10 +45,19 @@ class GameMaze:
 def _normalize(raw: object, width: int, height: int) -> GameMaze:
     """Reject ambiguous grids instead of interpreting wall bits as booleans."""
     def get(name: str, default: object = None) -> object:
-        return raw.get(name, default) if isinstance(raw, dict) else getattr(raw, name, default)
+        return raw.get(
+            name,
+            default) if isinstance(
+            raw,
+            dict) else getattr(
+            raw,
+            name,
+            default)
 
     if get('encoding') != 'edge_bits':
-        raise GenerationError('Expected edge_bits encoding; adapt the assigned package interface explicitly.')
+        raise GenerationError(
+            'Expected edge_bits encoding; adapt the '
+            'assigned package interface explicitly.')
     grid = get('grid')
     if not isinstance(grid, (list, tuple)) or len(grid) != height:
         raise GenerationError('Unexpected grid height.')
@@ -59,7 +69,7 @@ def _normalize(raw: object, width: int, height: int) -> GameMaze:
             raise GenerationError('Wall flags must be integers from 0 to 15.')
         edges.append(list(row))
     try:
-        blocked = {tuple(cell) for cell in get('blocked_cells', ())}
+        blocked = {tuple(cell) for cell in cast(Any, get('blocked_cells', ()))}
         if any(len(cell) != 2 or any(type(v) is not int for v in cell)
                or not (0 <= cell[0] < width and 0 <= cell[1] < height)
                for cell in blocked):
@@ -78,7 +88,8 @@ def _normalize(raw: object, width: int, height: int) -> GameMaze:
                 elif bool(bits & bit) != bool(edges[ny][nx] & opposite):
                     raise GenerationError('Shared wall flags disagree.')
             if (x, y) in blocked and bits != 15:
-                raise GenerationError('Blocked cells must have four closed walls.')
+                raise GenerationError(
+                    'Blocked cells must have four closed walls.')
     available = {(x, y) for y in range(height) for x in range(width)} - blocked
     if not available:
         raise GenerationError('No playable cells.')
@@ -101,9 +112,11 @@ def generate_maze(width: int, height: int, seed: int | None = None,
     """Call the configured external package with non-perfect generation."""
     try:
         package = importlib.import_module(package_name)
-        raw = package.generate(width=width, height=height, seed=seed, perfect=False)
+        raw = cast(Any, package).generate(
+            width=width, height=height, seed=seed, perfect=False)
         return _normalize(raw, width, height)
     except GenerationError:
         raise
     except Exception as exc:
-        raise GenerationError(f'Cannot use maze package {package_name}: {exc}') from exc
+        raise GenerationError(
+            f'Cannot use maze package {package_name}: {exc}') from exc

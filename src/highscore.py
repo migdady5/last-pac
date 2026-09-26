@@ -38,7 +38,9 @@ class HighscoreManager:
         try:
             data = json.loads(path.read_text(encoding="utf-8"))
         except (json.JSONDecodeError, OSError):
-            print(f"[highscore] Warning: could not read '{self.filename}'. Starting empty.")
+            print(
+                f"[highscore] Warning: could not read '{
+                    self.filename}'. Starting empty.")
             return []
         if not isinstance(data, list):
             return []
@@ -61,7 +63,8 @@ class HighscoreManager:
     def save(self) -> None:
         """Persist the current top-10 scores to disk."""
         try:
-            Path(self.filename).write_text(json.dumps(self.scores, indent=2), encoding="utf-8")
+            Path(self.filename).write_text(json.dumps(
+                self.scores, indent=2), encoding="utf-8")
         except OSError as exc:
             print(f"[highscore] Warning: could not save scores ({exc}).")
 
@@ -84,7 +87,8 @@ class HighscoreManager:
 
         self.scores.append({"name": clean_name, "score": clean_score})
         self.scores.sort(key=lambda entry: entry["score"], reverse=True)
-        made_it = {"name": clean_name, "score": clean_score} in self.scores[:10]
+        made_it = {"name": clean_name,
+                   "score": clean_score} in self.scores[:10]
         self.scores = self.scores[:10]
         self.save()
         return made_it

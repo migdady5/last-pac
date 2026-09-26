@@ -75,11 +75,13 @@ class Player:
 
         if not self._moving:
             dx, dy = self.next_direction
-            if self.next_direction != STOP and walls.can_move(self.x, self.y, dx, dy):
+            if self.next_direction != STOP and walls.can_move(
+                    self.x, self.y, dx, dy):
                 self.direction = self.next_direction
 
             dx, dy = self.direction
-            if self.direction == STOP or not walls.can_move(self.x, self.y, dx, dy):
+            if self.direction == STOP or not walls.can_move(
+                    self.x, self.y, dx, dy):
                 self.direction = STOP
                 return 0.0, False
             self._moving = True
@@ -168,7 +170,8 @@ class Ghost:
                 return first
             for direction in ALL_DIRECTIONS:
                 nx, ny = x + direction[0], y + direction[1]
-                if (nx, ny) not in visited and walls.can_move(x, y, direction[0], direction[1]):
+                if (nx, ny) not in visited and walls.can_move(
+                        x, y, direction[0], direction[1]):
                     visited.add((nx, ny))
                     queue.append((
                         nx, ny, direction if first == STOP else first
