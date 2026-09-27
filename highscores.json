@@ -1,7 +1,15 @@
 [
   {
+    "name": "ali",
+    "score": 1930
+  },
+  {
     "name": "k",
     "score": 940
+  },
+  {
+    "name": "Player",
+    "score": 330
   },
   {
     "name": "Player",
@@ -21,10 +29,14 @@
   },
   {
     "name": "Player",
+    "score": 80
+  },
+  {
+    "name": "Player",
     "score": 70
   },
   {
-    "name": "kkkkk",
-    "score": 10
+    "name": "k",
+    "score": 40
   }
 ]
